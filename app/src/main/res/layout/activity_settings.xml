@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.awesomesauce.andrew.stockpredictor.SettingsActivity">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ticker"
+        android:layout_centerHorizontal="true"
+        android:textSize="50sp"
+        android:id="@+id/blah" />
+    <EditText
+        android:maxLength="4"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="GOOG"
+        android:layout_below="@+id/blah"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp" android:id="@+id/ticker1"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Analyze"
+        android:id="@+id/button2"
+        android:layout_below="@+id/ticker1"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

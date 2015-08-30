@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.awesomesauce.andrew.stockpredictor.InfoActivity">
+    <item android:id="@+id/action_showWithGoogle"
+        android:title="Show With Google Finance"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_showWithYahoo"
+        android:title="Show With Yahoo Finance"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+</menu>

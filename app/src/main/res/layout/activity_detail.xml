@@ -1,0 +1,145 @@
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.awesomesauce.andrew.stockpredictor.InfoActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Average Price"
+        android:id="@+id/avgPrice"
+        android:layout_marginTop="90dp"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="GOOG"
+        android:id="@+id/ticker"
+        android:layout_marginLeft="120dp"
+        android:maxLength="4"
+ />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="2000"
+        android:inputType="number"
+        android:id="@+id/since"
+        android:maxLength="4"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+    android:layout_marginLeft="190dp"
+        android:layout_alignBottom="@+id/ticker"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Current Price"
+        android:id="@+id/currPrice"
+        android:layout_marginTop="130dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Last Years Price"
+        android:id="@+id/lastYearsPrice"
+        android:layout_marginTop="180dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Last Six Months Price"
+        android:id="@+id/lastSixMonthsPrice"
+        android:layout_marginTop="220dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Last Months Price"
+        android:id="@+id/lastMonthsPrice"
+        android:layout_marginTop="260dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Buy Y/N"
+        android:id="@+id/buy"
+        android:layout_marginTop="350dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Sell Value"
+        android:id="@+id/sellValue"
+android:layout_centerHorizontal="true"
+        android:layout_marginTop="420dp"
+        android:layout_marginBottom="74dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Predicted Price"
+        android:id="@+id/predPrice"
+        android:layout_marginTop="300dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Analyze"
+        android:id="@+id/button"
+ />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="GOOG"
+        android:id="@+id/ticker1"
+        android:layout_below="@+id/ticker"
+        android:layout_alignLeft="@+id/ticker"
+        android:layout_alignStart="@+id/ticker" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="2000"
+        android:id="@+id/since1"
+        android:layout_below="@+id/since"
+        android:layout_alignLeft="@+id/since"
+        android:layout_alignStart="@+id/since" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/loading"
+        android:layout_alignTop="@+id/lastSixMonthsPrice"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>
