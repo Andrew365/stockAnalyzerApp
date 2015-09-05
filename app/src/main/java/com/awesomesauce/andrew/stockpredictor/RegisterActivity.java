@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,78 +27,108 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class MainActivity extends Activity {
-    final private String TAG = MainActivity.class.getSimpleName();
+public class RegisterActivity extends Activity {
 
-    private int password;
-    private TextView oopsText;
-    private Handler mHandler;
-    private Button signupButton;
-    private EditText editUsername;
-    private EditText editPassword;
-    private Button loginButton;
+    private Button regButton;
+    private final String TAG = RegisterActivity.class.getSimpleName();
     private String jsonData;
     private int statusCode;
-    @Override
+    private EditText editUsername;
+    private EditText editPassword;
+    private EditText editConfrim;
+    private TextView errorView;
+
     protected void onCreate(Bundle savedInstanceState) {
-        password = 1903;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        loginButton = (Button) findViewById(R.id.show);
-        oopsText = (TextView) findViewById(R.id.usnameholder);
-        mHandler = new Handler();
-        signupButton = (Button) findViewById(R.id.signupButton);
+        setContentView(R.layout.activity_register);
+        errorView = (TextView) findViewById(R.id.errorView);
+        errorView.setVisibility(View.INVISIBLE);
 
-        signupButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                tryToRegister();
-            }
-        });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        regButton = (Button) findViewById(R.id.registerButton);
+        editPassword = (EditText) findViewById(R.id.pass1);
+        editConfrim = (EditText) findViewById(R.id.pass2);
+        editUsername = (EditText) findViewById(R.id.usernamePost);
+
+
+        regButton.setOnClickListener(new View.OnClickListener() {
+
+
+
+            @Override
             public void onClick(View v) {
-                tryToLogin();
+                String Password = editPassword.getText().toString();
+                String Username = editUsername.getText().toString();
+                String Confirm = editConfrim.getText().toString();
+
+                if(Password.matches("")){
+                    errorView.setVisibility(View.VISIBLE);
+                    errorView.setText("Cannot have an empty password");
+                }else if(Username.matches("")){
+                    errorView.setVisibility(View.VISIBLE);
+                    errorView.setText("Cannot have an empty username");
+
+                }else if(Confirm.matches("")) {
+                    errorView.setVisibility(View.VISIBLE);
+                    errorView.setText("Cannot have an empty username");
+                }else if(!Password.equals(Confirm)) {
+                    errorView.setVisibility(View.VISIBLE);
+                    errorView.setText("Passwords do not match");
+                }else{
+                    sendRegisterRequest();
+                }
             }
         });
     }
+    public int getStatusCode(String jsonData) throws JSONException {
 
-    private void tryToLogin() {
-        editPassword = (EditText) findViewById(R.id.password);
-        editUsername = (EditText) findViewById(R.id.username);
-        
-        //get values from edit texts
-        String password = editPassword.getText() + "";
-        String username = editUsername.getText() + "";
+        JSONObject statusCode = new JSONObject(jsonData);
+
+        int code = statusCode.getInt("status");
+
+        return code;
+    }
+
+    private int sendRegisterRequest() {
 
         HashCode hasher = new HashCode();
 
+        editPassword = (EditText) findViewById(R.id.pass1);
+        editUsername = (EditText) findViewById(R.id.usernamePost);
+        editConfrim = (EditText) findViewById(R.id.pass2);
+
+        //get values from edit texts
+        String password = editPassword.getText() + "";
+        String username = editUsername.getText() + "";
+        String confirmPass = editConfrim.getText() + "";
+
         String hashedPass = hasher.computeSHAHash(password);
+        String hashedConfirmPass = hasher.computeSHAHash(confirmPass);
+
 
         //try to login with function
         String apiKey = "k982kdhadnvna02w9fjsj10roajajs92";
 
-        String loginUrl = "http://acw.one/api/AuthForApp.php?key="
-                + apiKey + "&username="+ username+ "&password="+ hashedPass;
+        String registerKey = "o19p4o2infkjsdnaasdf3oirlkamfaiasfjp9y984hfkjfsdbfy8ey";
 
-        getJson(loginUrl);
+        String registerUrl = "http://acw.one/api/AuthForApp.php?" +
+                "key="+apiKey+"&username="+username+
+                "&password="+hashedPass+
+                "&register=true&registerKey="
+                +registerKey+"&confirmPassword="+hashedConfirmPass;
 
 
-       // oopsText.setText(hashedPass);
+            statusCode = getJson(registerUrl);
+
+        return statusCode;
     }
 
+    public void AllowAccess(){
+        Intent intent = new Intent(this, DashboardActivity.class);
+        startActivity(intent);
 
 
-public int getStatusCode(String jsonData) throws JSONException {
-
-    JSONObject statusCode = new JSONObject(jsonData);
-
-    int code = statusCode.getInt("status");
-
-    return code;
-}
-
-
-
+    }
     public int getJson(String url){
         if(isNetworkAvailable())
         {
@@ -129,7 +159,7 @@ public int getStatusCode(String jsonData) throws JSONException {
                         }
                     });
                     try {
-                         jsonData = response.body().string();
+                        jsonData = response.body().string();
                         if (response.isSuccessful()) {
                             Log.v(TAG, jsonData);
 
@@ -142,13 +172,8 @@ public int getStatusCode(String jsonData) throws JSONException {
                                         statusCode = getStatusCode(jsonData);
                                         if ((statusCode == 0) || (statusCode == 1) ){
                                             AllowAccess();
-
-                                            EditText username = (EditText) findViewById(R.id.username);
-                                            String usernameval = username.getText().toString();
-
-                                            Log.d(TAG, usernameval);
                                         }else{
-                                         //   Log.v(TAG, )
+                                            analyzeErrorCode(statusCode);
                                         }
                                     } catch (JSONException e) {
                                         Log.e(TAG, "JSON Exception found " + e);
@@ -177,8 +202,39 @@ public int getStatusCode(String jsonData) throws JSONException {
         }
         return statusCode;
     }
+/*
+
+2 == username found but password doesnt match
+3 == tried to register with taken username
+4 == tried to login but username not found
+5 == tried to register with bad registerKey
+6 == passwords dont match
+7 == confirm password not set
+ */
+
+    private void analyzeErrorCode(int statusCode) {
+        errorView = (TextView) findViewById(R.id.errorView);
+        errorView.setVisibility(View.VISIBLE);
+        switch (statusCode){
+            case 3:
+                errorView.setText("Username is taken");
+                break;
+            case 6:
+                errorView.setText("Passwords dont match");
+                break;
+
+        }
+        editPassword = (EditText) findViewById(R.id.pass1);
+        editConfrim = (EditText) findViewById(R.id.pass2);
+
+        String Password = editPassword.getText().toString();
+
+        if(Password.matches("")){
+            errorView.setText("Cannot have an empty password");
+        }
 
 
+    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager)
@@ -195,25 +251,10 @@ public int getStatusCode(String jsonData) throws JSONException {
     }
 
 
-
-
-    private void tryToRegister() {
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
-    }
-
-
-    public void AllowAccess(){
-        Intent intent = new Intent(this, DashboardActivity.class);
-        startActivity(intent);
-
-
-}
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_register, menu);
         return true;
     }
 
@@ -231,6 +272,4 @@ public int getStatusCode(String jsonData) throws JSONException {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
-
